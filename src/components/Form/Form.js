@@ -30,7 +30,7 @@ const Form = ({ currentId, setCurrentId }) => {
     }
   }, [post]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (
       !postData.creator ||
@@ -43,17 +43,23 @@ const Form = ({ currentId, setCurrentId }) => {
       console.log("Please complete all fields");
       return;
     }
-    if (currentId) {
-      dispatch(updatePost(currentId, postData));
-    } else {
-      dispatch(createPost(postData));
+    // dispatch(updatePost(curerenId, postData)) -> updatePost function currentId ?
+    try {
+      if (currentId) {
+        await dispatch(updatePost(currentId, postData));
+      } else {
+        await dispatch(createPost(postData));
+      }
+      clearFields();
+    } catch {
+      // showIng popup, please try again
     }
-    clearFields();
+
     // show success alert
   };
 
   const clearFields = () => {
-    setCurrentId(0);
+    // setCurrentId(null);
     setPostData({
       creator: "",
       title: "",
